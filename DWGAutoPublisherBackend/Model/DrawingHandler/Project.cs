@@ -2,10 +2,10 @@
 {
     public class Project
     {
-        public int ProjectNumber;
-        public string ProjectName;
-        public string ProjectPath;
-        public List<DWGFile> DWGs;
+        public int ProjectNumber { get; set; }
+        public string ProjectName { get; set; }
+        public string ProjectPath { get; set; }
+        public List<DWGFile> DWGs { get; set; }
 
         public Project(string path, int projectNumber, string projectName)
         {

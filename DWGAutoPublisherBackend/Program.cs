@@ -1,6 +1,6 @@
 using DWGAutoPublisherBackend.Model;
 
-DB.StartUp();
+var dB = DB.Instance;
 
 
 // Testing over

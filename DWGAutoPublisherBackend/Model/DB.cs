@@ -3,12 +3,11 @@ using DWGAutoPublisherBackend.Model.DrawingsFromFrontEnd;
 
 namespace DWGAutoPublisherBackend.Model
 {
-    public static class DB
+    public class DB
     {
-        public static List<Project> Projects { get; set; }
-        public static List<DWGFile> DWGs { get; set; }
+        private static DB _instance;
 
-        public static void StartUp()
+        private DB()
         {
             Projects = new List<Project>();
             DWGs = new List<DWGFile>();
@@ -20,6 +19,29 @@ namespace DWGAutoPublisherBackend.Model
             Projects.ForEach(e => { Console.WriteLine(e.ToString()); });
             Console.WriteLine("\nDB Startup ferdig \n");
         }
+
+        public static DB Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new DB();
+                }
+
+                return _instance;
+            }
+        }
+
+        public static void PrintEverything()
+        {
+            Console.WriteLine("DB Startup lets GO!!! \n");
+            Projects.ForEach(e => { Console.WriteLine(e.ToString()); });
+            Console.WriteLine("\nDB Startup ferdig \n");
+        }
+
+        public static List<Project> Projects { get; set; }
+        public static List<DWGFile> DWGs { get; set; }
 
         public static DWGFile MatchDWGFromFrontEndToDBDWGs(DWGFromFrontEnd dWGFromFrontEnd)
         {

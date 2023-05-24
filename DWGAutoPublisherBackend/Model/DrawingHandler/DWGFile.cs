@@ -4,15 +4,15 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
 {
     public class DWGFile
     {
-        public string FilePath;
-        public int ProjectNumber;
-        public string ProjectName;
-        public string FileName;
-        public string Status;
+        public string FilePath { get; set; }
+        public int ProjectNumber { get; set; }
+        public string ProjectName { get; set; }
+        public string FileName { get; set; }
+        public string Status { get; set; }
+        public DateTime LastUpdated { get; set; }
+        public List<Layout> Layouts { get; set; }
 
-        public DateTime LastUpdated;
 
-        public List<Layout> Layouts;
         private List<Layout> LayoutsToPrint; // Legg til ett delay på front enden
 
         public DWGFile(string path, int projectNumber, string projectName)
