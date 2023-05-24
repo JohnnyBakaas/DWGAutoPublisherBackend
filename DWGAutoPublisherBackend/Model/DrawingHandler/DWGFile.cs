@@ -11,6 +11,8 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
         public List<Layout> Layouts;
         private List<Layout> LayoutsToPrint; // Legg til ett delay på front enden
 
+
+
         private List<string> RetriveLayoutNames()
         {
             List<string> layoutNames = new List<string>();
@@ -23,18 +25,13 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
             List<string> layoutNames = RetriveLayoutNames();
             foreach (string layoutName in layoutNames)
             {
-                if (Layouts.Exists(e => e.Name == layoutName)) Layouts.Add(new Layout(layoutName, this));
+                if (Layouts.Exists(e => e.Name != layoutName)) Layouts.Add(new Layout(layoutName, this));
             }
-        }
-
-        public void AddFileToPrintQue()
-        {
-            if (LayoutsToPrint == null || LayoutsToPrint.Count == 0) DWGPrintingQue.AddDWGFileToPublishList(this);
         }
 
         public void UpdateStatus(DWGFromFrontEnd file)
         {
-            if (!Status.Equals(file.Status)) { return; }
+            if (!Status.Equals(file.Status)) return;
             Status = file.Status;
             UpdateLayoutsStatus();
         }
