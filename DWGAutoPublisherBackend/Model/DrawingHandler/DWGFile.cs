@@ -9,6 +9,9 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
         public string ProjectName;
         public string FileName;
         public string Status;
+
+        public DateTime LastUpdated;
+
         public List<Layout> Layouts;
         private List<Layout> LayoutsToPrint; // Legg til ett delay på front enden
 
@@ -41,6 +44,9 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
 
             output += ". Status: ";
             output += Status;
+
+            output += ". LastUpdated: ";
+            output += LastUpdated;
 
             output += ". FilePath: ";
             output += FilePath;
@@ -108,6 +114,16 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
             foreach (Layout layout in Layouts)
             {
                 layout.Status = Status;
+            }
+        }
+
+        public void UpdateLastWriteTime()
+        {
+            DateTime lastWriteTime = File.GetLastWriteTime(FilePath);
+            if (LastUpdated != lastWriteTime)
+            {
+                LastUpdated = lastWriteTime;
+                UpdateLayoutList();
             }
         }
     }

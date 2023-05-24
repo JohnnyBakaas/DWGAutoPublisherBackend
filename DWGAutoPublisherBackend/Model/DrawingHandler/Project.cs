@@ -23,6 +23,11 @@
             output += ". ProjectPath: ";
             output += ProjectPath;
 
+            foreach (DWGFile file in DWGs)
+            {
+                output += "\n    " + file.ToString();
+            }
+
             return output;
         }
 

@@ -13,6 +13,12 @@ namespace DWGAutoPublisherBackend.Model
             Projects = new List<Project>();
             DWGs = new List<DWGFile>();
             GetDirectory();
+            ConnectProjectsToDWG();
+            UpdateAllLastWriteTime();
+
+            Console.WriteLine("DB Startup lets GO!!! \n");
+            Projects.ForEach(e => { Console.WriteLine(e.ToString()); });
+            Console.WriteLine("\nDB Startup ferdig \n");
         }
 
         public static DWGFile MatchDWGFromFrontEndToDBDWGs(DWGFromFrontEnd dWGFromFrontEnd)
@@ -32,9 +38,6 @@ namespace DWGAutoPublisherBackend.Model
                 if (child == "porject") Projects.Add(new Project(file, pNumber, pName));
                 else if (child == ".dwg") DWGs.Add(new DWGFile(file, pNumber, pName));
             }
-
-            Projects.ForEach(e => { Console.WriteLine(e.ToString()); });
-            DWGs.ForEach(e => { Console.WriteLine(e.ToString()); });
         }
 
         private static int PathToProjectNumber(string path)
@@ -79,6 +82,28 @@ namespace DWGAutoPublisherBackend.Model
 
             if (acseptibleSufixes.Contains(sufix)) return sufix;
             return string.Empty;
+        }
+
+        private static void ConnectProjectsToDWG()
+        {
+            foreach (Project project in Projects)
+            {
+                foreach (DWGFile file in DWGs)
+                {
+                    if (file.FilePath.Contains(project.ProjectPath))
+                    {
+                        project.DWGs.Add(file);
+                    }
+                }
+            }
+        }
+
+        public static void UpdateAllLastWriteTime()
+        {
+            foreach (DWGFile file in DWGs)
+            {
+                file.UpdateLastWriteTime();
+            }
         }
     }
 }
