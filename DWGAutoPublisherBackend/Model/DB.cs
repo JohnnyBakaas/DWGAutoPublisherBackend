@@ -14,7 +14,7 @@ namespace DWGAutoPublisherBackend.Model
             DWGs = new List<DWGFile>();
             GetDirectory();
             ConnectProjectsToDWG();
-            UpdateAllLastWriteTime();
+            UpdateAllLastWriteTimeAndCheckForNewLayouts();
 
             Console.WriteLine("DB Startup lets GO!!! \n");
             Projects.ForEach(e => { Console.WriteLine(e.ToString()); });
@@ -98,7 +98,7 @@ namespace DWGAutoPublisherBackend.Model
             }
         }
 
-        public static void UpdateAllLastWriteTime()
+        public static void UpdateAllLastWriteTimeAndCheckForNewLayouts()
         {
             foreach (DWGFile file in DWGs)
             {
