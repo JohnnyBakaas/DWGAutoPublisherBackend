@@ -12,17 +12,14 @@
             ProjectPath = path;
             ProjectNumber = projectNumber;
             ProjectName = projectName;
+            DWGs = new List<DWGFile>();
         }
 
         public string ToString()
         {
-            string output = "ProjectNumber: ";
-            output += ProjectNumber;
-            if (ProjectName != string.Empty)
-            {
-                output += ". ProjectName: ";
-                output += ProjectName;
-            }
+            string output = "Project: ";
+            output += DisplayName();
+
             output += ". ProjectPath: ";
             output += ProjectPath;
 
