@@ -4,13 +4,36 @@
     {
         public int ProjectNumber;
         public string ProjectName;
+        public string ProjectPath;
         public List<DWGFile> DWGs;
+
+        public Project(string path, int projectNumber, string projectName)
+        {
+            ProjectPath = path;
+            ProjectNumber = projectNumber;
+            ProjectName = projectName;
+        }
+
+        public string ToString()
+        {
+            string output = "ProjectNumber: ";
+            output += ProjectNumber;
+            if (ProjectName != string.Empty)
+            {
+                output += ". ProjectName: ";
+                output += ProjectName;
+            }
+            output += ". ProjectPath: ";
+            output += ProjectPath;
+
+            return output;
+        }
+
+
 
         public string DisplayName()
         {
-            string displayName = $"P-{ProjectNumber} {ProjectName}";
-            Console.WriteLine(displayName);
-            return displayName;
+            return $"{Config.ProjectIdentifier}{ProjectNumber} {ProjectName}";
         }
 
         public void UpddateDWGs()

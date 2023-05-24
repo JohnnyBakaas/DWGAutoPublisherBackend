@@ -26,13 +26,31 @@ namespace DWGAutoPublisherBackend.Model
             List<string> list = directory.ReadAll();
             foreach (string file in list)
             {
-                string sufix = GetSufix(file);
-                Console.WriteLine(file);
-                Console.WriteLine("Dette er en " + sufix);
+                string child = GetTypeOfChild(file);
+                int pNumber = PathToProjectNumber(file);
+                string pName = PathToProjectName(file);
+                if (child == "porject") Projects.Add(new Project(file, pNumber, pName));
+                else if (child == ".dwg") DWGs.Add(new DWGFile(file, pNumber, pName));
             }
+
+            Projects.ForEach(e => { Console.WriteLine(e.ToString()); });
+            DWGs.ForEach(e => { Console.WriteLine(e.ToString()); });
         }
 
-        private static string GetSufix(string file)
+        private static int PathToProjectNumber(string path)
+        {
+            int index = path.IndexOf(Config.ProjectIdentifier) + 2;
+            return int.Parse(path.Substring(index, Config.ProjectNumberLength));
+        }
+
+        private static string PathToProjectName(string path)
+        {
+            int index = path.IndexOf(Config.ProjectIdentifier) + 2 + Config.ProjectNumberLength + 1;
+            if (index - 1 == path.Length) return string.Empty;
+            return path.Substring(index);
+        }
+
+        private static string GetTypeOfChild(string file)
         {
 
             string[] acseptibleSufixes = { ".dwg", ".pdf" };
@@ -50,8 +68,8 @@ namespace DWGAutoPublisherBackend.Model
 
             if (
                 indexOfLastDot == 0 &&
-                file.IndexOf("P-") != -1 &&
-                file.IndexOf('\\', file.IndexOf("P-")) == -1
+                file.IndexOf(Config.ProjectIdentifier) != -1 &&
+                file.IndexOf('\\', file.IndexOf(Config.ProjectIdentifier)) == -1
                 ) return "porject";
 
             if (indexOfLastDot == 0) return "folder";
@@ -61,16 +79,6 @@ namespace DWGAutoPublisherBackend.Model
 
             if (acseptibleSufixes.Contains(sufix)) return sufix;
             return string.Empty;
-        }
-
-        private static void MakeProjectOrDWG(string file)
-        {
-            string sufix = GetSufix(file);
-            if (sufix == null) return;
-            if (sufix == "folder")
-            {
-
-            }
         }
     }
 }
