@@ -2,6 +2,7 @@
 {
     public class Project
     {
+        public string DisplayName { get; set; }
         public int ProjectNumber { get; set; }
         public string ProjectName { get; set; }
         public string ProjectPath { get; set; }
@@ -13,12 +14,14 @@
             ProjectNumber = projectNumber;
             ProjectName = projectName;
             DWGs = new List<DWGFile>();
+            DisplayName = MakeDisplayName();
+
         }
 
         public string ToString()
         {
             string output = "Project: ";
-            output += DisplayName();
+            output += MakeDisplayName();
 
             output += ". ProjectPath: ";
             output += ProjectPath;
@@ -33,18 +36,11 @@
 
 
 
-        public string DisplayName()
+        public string MakeDisplayName()
         {
             return $"{Config.ProjectIdentifier}{ProjectNumber} {ProjectName}";
         }
 
-        public void UpddateDWGs()
-        {
-            // Noe som leser alle under mapper
-            if (DWGs == null)
-            {
-                DWGs = new List<DWGFile>();
-            }
-        }
+
     }
 }

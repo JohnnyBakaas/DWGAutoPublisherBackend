@@ -114,7 +114,10 @@ namespace DWGAutoPublisherBackend.Model
                 {
                     if (file.FilePath.Contains(project.ProjectPath))
                     {
-                        project.DWGs.Add(file);
+                        if (file.FileName.Contains(project.ProjectNumber.ToString()))
+                        {
+                            project.DWGs.Add(file);
+                        }
                     }
                 }
             }
