@@ -6,9 +6,9 @@ namespace DWGAutoPublisherBackend.Model.AutoCAD_Handeler
     {
         public static List<string> Read(string dwgFilePath)
         {
-            string autoCADPath = @"C:\Program Files\Autodesk\AutoCAD 2022\accoreconsole.exe";
+            string autoCADPath = Config.AutoCADCoreConsolePath;
             //@"C:\Test for Autocad greier\P-10001\DWG\P-10001 2.etg.dwg"
-            string scriptFilePath = @"C:\Test for Autocad greier\P-10001\script.scr";
+            string scriptFilePath = Config.LayoutReaderScript;
 
             string output = string.Empty;
 

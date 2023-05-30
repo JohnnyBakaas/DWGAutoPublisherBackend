@@ -2,6 +2,10 @@
 {
     public static class Config
     {
+        private static string _baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
+        public static string LayoutReaderScript = Path.Combine(_baseDirectory, "Model", "AutoCAD Handeler", "Scripts", "LayoutReaderScript.scr");
+
         public static string RootFolder { get; } = @"C:\Test for Autocad greier";
         public static string ProjectIdentifier { get; } = "P-";
         public static int ProjectNumberLength { get; } = 5;

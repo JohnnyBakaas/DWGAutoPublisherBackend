@@ -2,6 +2,8 @@ using DWGAutoPublisherBackend.Model;
 
 //LayoutReader.Read(@"C:\Test for Autocad greier\P-10001\DWG\P-10001 2.etg.dwg");
 
+Console.WriteLine(Config.LayoutReaderScript);
+
 var dB = DB.Instance;
 
 
