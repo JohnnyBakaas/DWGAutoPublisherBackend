@@ -3,9 +3,9 @@
     public class Layout
     {
         public DWGFile Parent;
-        public string Name;
-        public string Status;
-        public DateTime LastPrinted;
+        public string Name { get; set; }
+        public string Status { get; set; }
+        public DateTime LastPrinted { get; set; }
         public bool HasBeenPrinted => LastPrinted != DateTime.MinValue;
 
         public Layout(string name, DWGFile parent)

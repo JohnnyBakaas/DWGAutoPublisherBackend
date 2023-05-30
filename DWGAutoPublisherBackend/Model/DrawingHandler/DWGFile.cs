@@ -1,4 +1,5 @@
-﻿using DWGAutoPublisherBackend.Model.DrawingsFromFrontEnd;
+﻿using DWGAutoPublisherBackend.Model.AutoCAD_Handeler;
+using DWGAutoPublisherBackend.Model.DrawingsFromFrontEnd;
 
 namespace DWGAutoPublisherBackend.Model.DrawingHandler
 {
@@ -11,7 +12,6 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
         public string Status { get; set; }
         public DateTime LastUpdated { get; set; }
         public List<Layout> Layouts { get; set; }
-
 
         private List<Layout> LayoutsToPrint; // Legg til ett delay på front enden
 
@@ -27,6 +27,8 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
 
             Layouts = new List<Layout>();
             LayoutsToPrint = new List<Layout>();
+
+            UpdateLayoutList();
         }
 
         public string ToString()
@@ -74,19 +76,16 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
             return shitOut;
         }
 
-        private List<string> RetriveLayoutNames()
-        {
-            List<string> layoutNames = new List<string>();
-            // Gjør det så den henter navnene på alle Layouts
-            return layoutNames;
-        } //TODO Legg til funksjonalitet
-
         public void UpdateLayoutList()
         {
-            List<string> layoutNames = RetriveLayoutNames();
+            List<string> layoutNames = LayoutReader.Read(FilePath);
             foreach (string layoutName in layoutNames)
             {
-                if (Layouts.Exists(e => e.Name != layoutName)) Layouts.Add(new Layout(layoutName, this));
+                //Console.WriteLine(layoutName);
+                if (!Layouts.Exists(e => e.Name == layoutName))
+                {
+                    Layouts.Add(new Layout(layoutName, this));
+                }
             }
         }
 

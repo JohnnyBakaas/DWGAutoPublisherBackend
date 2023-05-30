@@ -7,8 +7,36 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <COMReference Include="AutoCAD">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>0</VersionMinor>
+      <VersionMajor>1</VersionMajor>
+      <Guid>aa9a2205-75aa-43ad-9138-1767f1bb5e0c</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Model\AutoCAD Handeler\Scripts\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="accoremgd">
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\AutoCAD 2022\accoremgd.dll</HintPath>
+    </Reference>
+    <Reference Include="Acdbmgd">
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\AutoCAD 2022\acdbmgd.dll</HintPath>
+    </Reference>
+    <Reference Include="Acmgd">
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\AutoCAD 2022\acmgd.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

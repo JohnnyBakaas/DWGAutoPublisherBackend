@@ -1,6 +1,6 @@
 ﻿namespace DWGAutoPublisherBackend.Model.DWGPrinter
 {
-    public static class DWGPrintingQue
+    public static class DWGPrintingQue // Dette er ett flott sted å bruke en Linked List istedefor det fucka arrayet
     {
         private static List<DWGPrintingQueTicket> _ticketQue = new List<DWGPrintingQueTicket>();
         private static List<DWGPrintingQueTicket> _compleatedTickets = new List<DWGPrintingQueTicket>();
