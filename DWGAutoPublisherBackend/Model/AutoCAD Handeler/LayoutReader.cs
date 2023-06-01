@@ -23,7 +23,7 @@ namespace DWGAutoPublisherBackend.Model.AutoCAD_Handeler
                 autocadProcess.Start();
                 // Read the output from AutoCAD Core Console
                 string internalOutput = autocadProcess.StandardOutput.ReadToEnd();
-                //Console.WriteLine("AutoCAD output: " + internalOutput.Trim());
+                Console.WriteLine("AutoCAD output: " + internalOutput.Trim());
 
                 // Send "exit" command to AutoCAD Core Console
                 autocadProcess.StandardInput.WriteLine("exit");

@@ -7,6 +7,8 @@ namespace DWGAutoPublisherBackend.Model
     {
         private static DB _instance;
 
+        // Sikre driten din, ting fungerer dårlig hvis det ikke er sånn ja idk det er sent
+
         private DB()
         {
             Projects = new List<Project>();
@@ -65,6 +67,7 @@ namespace DWGAutoPublisherBackend.Model
         private static int PathToProjectNumber(string path)
         {
             int index = path.IndexOf(Config.ProjectIdentifier) + 2;
+            Console.WriteLine(path);
             return int.Parse(path.Substring(index, Config.ProjectNumberLength));
         }
 
