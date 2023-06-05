@@ -36,11 +36,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Model\AutoCAD Handeler\Scripts\LayoutPublisher.bat">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Model\AutoCAD Handeler\Scripts\LayoutReaderScript.scr">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

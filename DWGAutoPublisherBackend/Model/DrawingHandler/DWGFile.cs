@@ -53,6 +53,11 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
             output += ". FilePath: ";
             output += FilePath;
 
+            foreach (var layout in Layouts)
+            {
+                output += layout.ToString();
+            }
+
             return output;
         }
 

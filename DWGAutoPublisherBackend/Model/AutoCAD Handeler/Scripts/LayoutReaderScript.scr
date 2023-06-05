@@ -1,2 +1,2 @@
-(command "_netload" "C:/Program Files/Autodesk/AutoCAD 2022/AutoCAD Plugins and Addons.dll")
+(command "_netload" "C:\\Program Files\\Autodesk\\AutoCAD 2022\\AutoCAD Plugins and Addons.dll")
 (command "ListLayouts")

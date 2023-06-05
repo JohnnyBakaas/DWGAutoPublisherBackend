@@ -20,5 +20,10 @@
         {
             //Parent.AddLayoutsToPrint(this);
         }
+
+        public string ToString()
+        {
+            return Name;
+        }
     }
 }
