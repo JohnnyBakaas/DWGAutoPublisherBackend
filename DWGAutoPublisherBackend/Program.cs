@@ -10,9 +10,9 @@ var dB = DB.Instance;
 
 Console.WriteLine("Publis test");
 Console.WriteLine();
-Console.WriteLine(DB.DWGs[5].ToString());
+Console.WriteLine(DB.DWGs[4].ToString());
 Console.WriteLine();
-LayoutPublisher.Publish(DB.DWGs[5].FilePath, DB.DWGs[5].Layouts);
+LayoutPublisher.Publish(DB.DWGs[4].FilePath, DB.DWGs[4].Layouts);
 Console.WriteLine("Publis test slutt");
 
 // Testing over

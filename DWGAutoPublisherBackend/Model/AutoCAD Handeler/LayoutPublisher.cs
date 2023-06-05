@@ -35,19 +35,19 @@ namespace DWGAutoPublisherBackend.Model.AutoCAD_Handeler
 
         private static string MakeScriptString(List<Layout> layoutList)
         {
-            string script = @"(command ""_netload"" ""C:\\Program Files\\Autodesk\\AutoCAD 2022\\AutoCAD Plugins and Addons.dll"")";
-            script += "\n";
+            string script = "";
+
 
             foreach (Layout layout in layoutList)
             {
                 script += @$"(command ""-layout"" ""s"" ""{layout.Name}"")";
                 script += "\n";
-                //script += @$"(command ""PublishLayoutToPDFAOne"" ""{"isoA1"/*layout.Name*/}"")";
+
                 script += "-plot";
                 script += "\n";
-                script += "";
+                script += "n";
                 script += "\n";
-                script += "";
+                script += $"{layout.Name}";
                 script += "\n";
                 script += "";
                 script += "\n";
@@ -61,8 +61,7 @@ namespace DWGAutoPublisherBackend.Model.AutoCAD_Handeler
                 script += "\n";
                 script += "y";
                 script += "\n";
-                script += "y";
-                script += "\n";
+
             }
 
             script += "(close)";
