@@ -59,8 +59,6 @@ namespace DWGAutoPublisherBackend.Model.AutoCAD_Handeler
                 script += "\n";
                 script += "y";
                 script += "\n";
-                script += "y";
-                script += "\n";
 
             }
 
