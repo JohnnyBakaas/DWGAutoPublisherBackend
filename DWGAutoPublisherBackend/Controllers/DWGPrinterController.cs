@@ -14,12 +14,15 @@ namespace DWGAutoPublisherBackend.Controllers
     {
 
         // PUT api/<DWGPrinterController>/5
-        [HttpPut("{name}")]
-        public int Put(string name, [FromBody] DWGFromFrontEnd dwgFromFrontEnd)
+        [HttpPut]
+        public int Put([FromBody] DWGFromFrontEnd dwgFromFrontEnd)
         {
             DWGFile foundFile = DB.MatchDWGFromFrontEndToDBDWGs(dwgFromFrontEnd);
             if (foundFile == null) return 0;
             foundFile.UpdateStatus(dwgFromFrontEnd);
+
+            if (dwgFromFrontEnd.LayoutsFromFrontEnd.Length == 0) return 0;
+
             DWGPrintingQueTicket ticket = new DWGPrintingQueTicket(foundFile);
             DWGPrintingQue.AddDWGFileToPublishList(ticket);
             return ticket.TicketNumber;

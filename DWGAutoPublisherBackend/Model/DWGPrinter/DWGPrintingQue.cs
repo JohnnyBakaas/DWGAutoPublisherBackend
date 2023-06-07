@@ -1,29 +1,63 @@
-﻿namespace DWGAutoPublisherBackend.Model.DWGPrinter
+﻿using DWGAutoPublisherBackend.Model.AutoCAD_Handeler;
+using DWGAutoPublisherBackend.Model.DrawingHandler;
+
+namespace DWGAutoPublisherBackend.Model.DWGPrinter
 {
-    public static class DWGPrintingQue // Dette er ett flott sted å bruke en Linked List istedefor det fucka arrayet
+    public static class DWGPrintingQue
     {
-        private static List<DWGPrintingQueTicket> _ticketQue = new List<DWGPrintingQueTicket>();
+        // I should really be using a propper Que with a linked list, but its like 10 elements max... so this is fine.
+        // Also the time complexety is O(n^AutoCAD) so thats the actual limiting factor. Multy threading would be a good idea to.
+        // Update! Now using a LL, Dose not matter alt all, but this is cooler and better for preformance... tecnicaly
+        // This is stil O(n^AutoCAD), so you know
+        private static LinkedList<DWGPrintingQueTicket> _ticketQue = new LinkedList<DWGPrintingQueTicket>();
         private static List<DWGPrintingQueTicket> _compleatedTickets = new List<DWGPrintingQueTicket>();
         private static bool _imStillPrinting = false;
 
         public static void AddDWGFileToPublishList(DWGPrintingQueTicket dWGPrintingQueTicket)
         {
-            _ticketQue.Add(dWGPrintingQueTicket);
-            //if !Tom liste Start printeren
+            _ticketQue.AddLast(dWGPrintingQueTicket);
+            if (!_imStillPrinting)
+            {
+                _imStillPrinting = true;
+                TicketHandeler();
+            }
         }
 
-        public static bool TicketReplyer(int ticketNumber)
+        public static DWGFile? TicketReplyer(int ticketNumber)
         {
             DWGPrintingQueTicket foundTicket = _compleatedTickets.FirstOrDefault(e => e.TicketNumber == ticketNumber);
-            if (foundTicket != null) { return false; }
-            return true;
+
+            if (foundTicket == null)
+            {
+                return null;
+            }
+            return foundTicket.GetDWGFile();
         }
 
         private static void TicketHandeler()
         {
-            var firstInQ = _ticketQue.FirstOrDefault();
-            if (firstInQ == null) return;
-            //DWGPrinter.Print(firstInQ);
+            if (_ticketQue.Count == 0)
+            {
+                _imStillPrinting = false;
+                return;
+
+            }
+            var firstInQ = _ticketQue.First.Value;
+            DWGFile theFile = firstInQ.GetDWGFile();
+            var layouts = theFile.GetLayoutsToPrint();
+
+            List<string> paths = LayoutPublisher.Publish(theFile.FilePath, layouts);
+
+            for (int i = 0; i < layouts.Count; i++)
+            {
+                layouts[i].FilePath = paths[i];
+                layouts[i].LastPrinted = DateTime.Now;
+            }
+
+            _compleatedTickets.Add(firstInQ);
+
+            _ticketQue.RemoveFirst();
+
             TicketHandeler();
         }
     }

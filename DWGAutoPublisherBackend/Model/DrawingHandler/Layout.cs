@@ -7,6 +7,7 @@
         public string Status { get; set; }
         public DateTime LastPrinted { get; set; }
         public bool HasBeenPrinted => LastPrinted != DateTime.MinValue;
+        public string? FilePath { get; set; }
 
         public Layout(string name, DWGFile parent)
         {
@@ -14,11 +15,7 @@
             Parent = parent;
             Status = "Under prosjektering";
             LastPrinted = DateTime.MinValue;
-        }
-
-        public void AddToPrintOrder()
-        {
-            //Parent.AddLayoutsToPrint(this);
+            FilePath = null;
         }
 
         public string ToString()

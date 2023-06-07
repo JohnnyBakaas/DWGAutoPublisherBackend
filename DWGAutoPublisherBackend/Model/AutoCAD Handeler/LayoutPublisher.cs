@@ -5,7 +5,7 @@ namespace DWGAutoPublisherBackend.Model.AutoCAD_Handeler
 {
     public static class LayoutPublisher
     {
-        public static void Publish(string dwgFilePath, List<Layout> layoutList)
+        public static List<string> Publish(string dwgFilePath, List<Layout> layoutList)
         {
             string scriptContent = MakeScriptString(layoutList);
             WriteScriptfile(scriptContent);
@@ -30,19 +30,51 @@ namespace DWGAutoPublisherBackend.Model.AutoCAD_Handeler
 
             Console.WriteLine(output);
 
+            string[] lines = output.Split('\n');
+
+            List<string> paths = new List<string>();
+
+            foreach (string line in lines)
+            {
+                int indexOfLastDont = line.LastIndexOf('.');
+
+                if (indexOfLastDont != -1)
+                {
+                    if (
+                        indexOfLastDont < line.IndexOf('p', indexOfLastDont) &&
+                        line.IndexOf('p', indexOfLastDont) < line.IndexOf('d', indexOfLastDont) &&
+                        line.IndexOf('d', indexOfLastDont) < line.IndexOf('f', indexOfLastDont)
+                        )
+                    {
+                        string cleanLine = "";
+                        for (int i = 0; i < line.Length; i++)
+                        {
+                            // This is becouase ACAD is sutch a "Nice" program and nothing is bad about it.
+                            // We love ACAD with all of ouer heart :)))))
+                            if (i % 2 == 1) cleanLine += line[i];
+                        }
+
+                        Console.WriteLine(cleanLine);
+                        if (cleanLine.Contains(".pdf")) paths.Add(cleanLine);
+                    }
+                }
+            }
+
             File.Delete(Config.LayoutPublisherScript);
+
+            return paths;
         }
 
         private static string MakeScriptString(List<Layout> layoutList)
         {
             string script = "";
 
+            //TODO Gjør det til en fancy comand istedefor sånn det er nå :)
 
             foreach (Layout layout in layoutList)
             {
                 script += @$"(command ""-layout"" ""s"" ""{layout.Name}"")";
                 script += "\n";
-
                 script += "-plot";
                 script += "\n";
                 script += "n";
@@ -59,7 +91,6 @@ namespace DWGAutoPublisherBackend.Model.AutoCAD_Handeler
                 script += "\n";
                 script += "y";
                 script += "\n";
-
             }
 
             script += "(close)";
@@ -69,19 +100,17 @@ namespace DWGAutoPublisherBackend.Model.AutoCAD_Handeler
             return script;
         }
 
-
         private static void WriteScriptfile(string scriptString)
         {
             string pathName = Config.LayoutPublisherScript;
-            using (StreamWriter writer = new StreamWriter(pathName, false))  // opens the file if it exists or creates a new one
+            using (StreamWriter writer = new StreamWriter(pathName, false))
             {
                 writer.Write(scriptString);
             }
         }
-
     }
 }
 
 /*
-                
+
  */

@@ -130,5 +130,12 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
                 UpdateLayoutList();
             }
         }
+
+        public List<Layout> GetLayoutsToPrint()
+        {
+            var layouts = LayoutsToPrint;
+            LayoutsToPrint = new List<Layout>();
+            return layouts;
+        }
     }
 }
