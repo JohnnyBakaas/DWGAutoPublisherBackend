@@ -7,7 +7,7 @@ namespace DWGAutoPublisherBackend.Model.DWGPrinter
         public int TicketNumber { get; set; }
         private DWGFile DWGFile;
 
-        private static int lastTicket = 0;
+        private static int lastTicket = 1;
 
         public DWGPrintingQueTicket(DWGFile dWGFile)
         {
