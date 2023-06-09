@@ -5,9 +5,10 @@
         public DWGFile Parent;
         public string Name { get; set; }
         public string Status { get; set; }
+        public string ParentFilePath { get; set; }
+        public string? FilePath { get; set; }
         public DateTime LastPrinted { get; set; }
         public bool HasBeenPrinted => LastPrinted != DateTime.MinValue;
-        public string? FilePath { get; set; }
 
         public Layout(string name, DWGFile parent)
         {
@@ -16,11 +17,12 @@
             Status = "Under prosjektering";
             LastPrinted = DateTime.MinValue;
             FilePath = null;
+            ParentFilePath = parent.FilePath;
         }
 
         public string ToString()
         {
-            return Name;
+            return $" - {Name}";
         }
     }
 }

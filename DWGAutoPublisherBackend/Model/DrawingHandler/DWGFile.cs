@@ -89,7 +89,9 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
                 //Console.WriteLine(layoutName);
                 if (!Layouts.Exists(e => e.Name == layoutName))
                 {
-                    Layouts.Add(new Layout(layoutName, this));
+                    var layout = new Layout(layoutName, this);
+                    Layouts.Add(layout);
+                    DB.Layouts.Add(layout);
                 }
             }
         }
@@ -133,7 +135,11 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
 
         public List<Layout> GetLayoutsToPrint()
         {
-            var layouts = LayoutsToPrint;
+            var layouts = new List<Layout>(LayoutsToPrint.Count);
+            foreach (var layout in LayoutsToPrint)
+            {
+                layouts.Add(layout);
+            }
             LayoutsToPrint = new List<Layout>();
             return layouts;
         }

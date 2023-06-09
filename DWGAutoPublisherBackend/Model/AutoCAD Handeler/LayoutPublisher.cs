@@ -55,7 +55,18 @@ namespace DWGAutoPublisherBackend.Model.AutoCAD_Handeler
                         }
 
                         Console.WriteLine(cleanLine);
-                        if (cleanLine.Contains(".pdf")) paths.Add(cleanLine);
+
+                        string path = "";
+
+                        if (cleanLine.Contains(".pdf"))
+                        {
+                            for (int i = cleanLine.IndexOf("C:\\"); i < cleanLine.IndexOf(">:"); i++)
+                            {
+                                path += cleanLine[i];
+                            }
+                            cleanLine.IndexOf("C:\\");
+                            paths.Add(path);
+                        }
                     }
                 }
             }
@@ -96,6 +107,8 @@ namespace DWGAutoPublisherBackend.Model.AutoCAD_Handeler
             script += "(close)";
 
             Console.WriteLine(script);
+
+            if (script == "(close)") script = "\n(close)";
 
             return script;
         }

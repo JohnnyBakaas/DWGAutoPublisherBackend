@@ -42,19 +42,26 @@ namespace DWGAutoPublisherBackend.Model.DWGPrinter
                 return;
 
             }
-            var firstInQ = _ticketQue.First.Value;
-            DWGFile theFile = firstInQ.GetDWGFile();
+            DWGPrintingQueTicket firstValueInQ = _ticketQue.First.Value;
+            DWGFile theFile = firstValueInQ.GetDWGFile();
             var layouts = theFile.GetLayoutsToPrint();
+
+            Console.WriteLine("DWGPRINTINGQUE Her er jeg XDDDDDDDDDXDDXDXDXDXDXDXDXXD");
+            layouts.ForEach(e => { Console.WriteLine(e.ToString()); });
 
             List<string> paths = LayoutPublisher.Publish(theFile.FilePath, layouts);
 
             for (int i = 0; i < layouts.Count; i++)
             {
+                string foundPath = paths.FirstOrDefault(e => e.Contains(layouts[i].Name));
                 layouts[i].FilePath = paths[i];
                 layouts[i].LastPrinted = DateTime.Now;
+
+                paths[i] = "No layout shall ever be caled this";
+                // Im qurious what would be better, this or shifting the array, im guessing both are shit
             }
 
-            _compleatedTickets.Add(firstInQ);
+            _compleatedTickets.Add(firstValueInQ);
 
             _ticketQue.RemoveFirst();
 

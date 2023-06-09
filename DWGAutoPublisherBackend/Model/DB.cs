@@ -1,5 +1,6 @@
 ﻿using DWGAutoPublisherBackend.Model.DrawingHandler;
 using DWGAutoPublisherBackend.Model.DrawingsFromFrontEnd;
+using Layout = DWGAutoPublisherBackend.Model.DrawingHandler.Layout;
 
 namespace DWGAutoPublisherBackend.Model
 {
@@ -13,6 +14,7 @@ namespace DWGAutoPublisherBackend.Model
         {
             Projects = new List<Project>();
             DWGs = new List<DWGFile>();
+            Layouts = new List<Layout>();
             GetDirectory();
             ConnectProjectsToDWG();
             UpdateAllLastWriteTimeAndCheckForNewLayouts();
@@ -44,6 +46,7 @@ namespace DWGAutoPublisherBackend.Model
 
         public static List<Project> Projects { get; set; }
         public static List<DWGFile> DWGs { get; set; }
+        public static List<Layout> Layouts { get; set; }
 
         public static DWGFile MatchDWGFromFrontEndToDBDWGs(DWGFromFrontEnd dWGFromFrontEnd)
         {
