@@ -25,13 +25,9 @@ namespace DWGAutoPublisherBackend.Model.DWGPrinter
 
         public static DWGFile? TicketReplyer(int ticketNumber)
         {
-            DWGPrintingQueTicket foundTicket = _compleatedTickets.FirstOrDefault(e => e.TicketNumber == ticketNumber);
+            DWGPrintingQueTicket? foundTicket = _compleatedTickets.FirstOrDefault(e => e.TicketNumber == ticketNumber);
 
-            if (foundTicket == null)
-            {
-                return null;
-            }
-            return foundTicket.GetDWGFile();
+            return foundTicket?.GetDWGFile() ?? null;
         }
 
         private static void TicketHandeler()

@@ -8,7 +8,7 @@ namespace DWGAutoPublisherBackend.Model.AutoCAD_Handeler
         {
             string autoCADPath = Config.AutoCADCoreConsolePath;
             //@"C:\Test for Autocad greier\P-10001\DWG\P-10001 2.etg.dwg"
-            string scriptFilePath = Config.LayoutReaderScript;
+            string layoutReaderScript = Config.LayoutReaderScript;
 
             string output = string.Empty;
 
@@ -16,7 +16,7 @@ namespace DWGAutoPublisherBackend.Model.AutoCAD_Handeler
             {
                 Process autocadProcess = new Process();
                 autocadProcess.StartInfo.FileName = autoCADPath;
-                autocadProcess.StartInfo.Arguments = $@"/i ""{dwgFilePath}"" /s ""{scriptFilePath}""";
+                autocadProcess.StartInfo.Arguments = $@"/i ""{dwgFilePath}"" /s ""{layoutReaderScript}""";
                 autocadProcess.StartInfo.UseShellExecute = false;
                 autocadProcess.StartInfo.RedirectStandardOutput = true;
                 autocadProcess.StartInfo.RedirectStandardInput = true;
@@ -45,7 +45,7 @@ namespace DWGAutoPublisherBackend.Model.AutoCAD_Handeler
                         string layoutString = string.Empty;
                         for (int i = index + 1; i < nextIndex; i++)
                         {
-                            if (i % 2 != 1) layoutString += output[i];
+                            if (i % 2 == 0) layoutString += output[i];
                         }
                         if (layoutString != "  " && layoutString != "" && layoutString != "Model")
                             layouts.Add(layoutString);
@@ -54,15 +54,6 @@ namespace DWGAutoPublisherBackend.Model.AutoCAD_Handeler
                     // Hold på bunn
                     index = nextIndex;
                 }
-                /*
-                foreach (string layout in layouts)
-                {
-                    Console.WriteLine(layout);
-                }
-
-                Console.WriteLine();
-                Console.WriteLine("HEi");
-                */
 
                 return layouts;
             }

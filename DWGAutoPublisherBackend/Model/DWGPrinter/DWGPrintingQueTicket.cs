@@ -12,7 +12,6 @@ namespace DWGAutoPublisherBackend.Model.DWGPrinter
         public DWGPrintingQueTicket(DWGFile dWGFile)
         {
             TicketNumber = lastTicket++;
-
             DWGFile = dWGFile;
         }
 

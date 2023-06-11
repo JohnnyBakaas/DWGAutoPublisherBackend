@@ -1,5 +1,5 @@
+using DWGAutoPublisherBackend.Helpers;
 using DWGAutoPublisherBackend.Model;
-using DWGAutoPublisherBackend.Model.AutoCAD_Handeler;
 
 //LayoutReader.Read(@"C:\Test for Autocad greier\P-10001\DWG\P-10001 2.etg.dwg");
 
@@ -8,12 +8,14 @@ Console.WriteLine(Config.LayoutReaderScript);
 
 var dB = DB.Instance;
 
+/*
 Console.WriteLine("Publis test");
 Console.WriteLine();
 Console.WriteLine(DB.DWGs[0].ToString());
 Console.WriteLine();
 LayoutPublisher.Publish(DB.DWGs[0].FilePath, DB.DWGs[0].Layouts);
 Console.WriteLine("Publis test slutt");
+*/
 
 // Testing over
 
@@ -40,6 +42,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IValidator, Validator>();
 
 var app = builder.Build();
 

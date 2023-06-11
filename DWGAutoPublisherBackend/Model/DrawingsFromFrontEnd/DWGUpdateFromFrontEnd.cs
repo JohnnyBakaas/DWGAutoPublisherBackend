@@ -4,5 +4,6 @@
     {
         public string FilePath { get; set; }
         public string Status { get; set; }
+
     }
 }
