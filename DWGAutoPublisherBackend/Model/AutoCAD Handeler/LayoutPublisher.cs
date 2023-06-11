@@ -38,6 +38,7 @@ namespace DWGAutoPublisherBackend.Model.AutoCAD_Handeler
             {
                 int indexOfLastDont = line.LastIndexOf('.');
 
+
                 if (indexOfLastDont != -1)
                 {
                     if (
