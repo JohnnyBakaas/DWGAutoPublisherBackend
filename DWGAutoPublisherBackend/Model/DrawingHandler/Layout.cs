@@ -22,7 +22,7 @@
 
         public string ToString()
         {
-            return $" - {Name}";
+            return $" - {Name} - {FilePath}";
         }
     }
 }
