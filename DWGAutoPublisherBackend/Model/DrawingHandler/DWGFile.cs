@@ -14,6 +14,7 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
         public List<Layout> Layouts { get; set; }
 
         private List<Layout> LayoutsToPrint; // Legg til ett delay på front enden
+        public Project Parent;
 
         public DWGFile(string path, int projectNumber, string projectName)
         {

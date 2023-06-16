@@ -8,6 +8,9 @@
         public static string LayoutReaderScript = Path.Combine(_baseDirectory, "Model", "AutoCAD Handeler", "Scripts", "LayoutReaderScript.scr");
         public static string LayoutPublisherScript = Path.Combine(_baseDirectory, "Model", "AutoCAD Handeler", "Scripts", "GeneratedScript.scr");
 
+        public static string SQLConnectionString { get; } =
+            "Data Source=(localdb)\\MSSQLLocalDB;Database=master;Integrated Security=sspi;";
+
         public static string RootFolder { get; } = @"C:\Test for Autocad greier";
         public static string ProjectIdentifier { get; } = "P-";
         public static int ProjectNumberLength { get; } = 5;
