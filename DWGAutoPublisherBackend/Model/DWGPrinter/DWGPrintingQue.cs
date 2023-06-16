@@ -1,5 +1,6 @@
 ﻿using DWGAutoPublisherBackend.Model.AutoCAD_Handeler;
 using DWGAutoPublisherBackend.Model.DrawingHandler;
+using Microsoft.Data.SqlClient;
 
 namespace DWGAutoPublisherBackend.Model.DWGPrinter
 {
@@ -10,6 +11,7 @@ namespace DWGAutoPublisherBackend.Model.DWGPrinter
         // Update! Now using a LL, Dose not matter alt all, but this is cooler and better for preformance... tecnicaly
         // This is stil O(n^AutoCAD), so you know
         private static LinkedList<DWGPrintingQueTicket> _ticketQue = new LinkedList<DWGPrintingQueTicket>();
+
         private static List<DWGPrintingQueTicket> _compleatedTickets = new List<DWGPrintingQueTicket>();
         private static bool _imStillPrinting = false;
 
@@ -36,7 +38,6 @@ namespace DWGAutoPublisherBackend.Model.DWGPrinter
             {
                 _imStillPrinting = false;
                 return;
-
             }
             DWGPrintingQueTicket firstValueInQ = _ticketQue.First.Value;
             DWGFile theFile = firstValueInQ.GetDWGFile();
@@ -53,6 +54,8 @@ namespace DWGAutoPublisherBackend.Model.DWGPrinter
                 layouts[i].FilePath = paths[i];
                 layouts[i].LastPrinted = DateTime.Now;
 
+                UpdatePathInSQL(layouts[i]);
+
                 paths[i] = "No layout shall ever be caled this";
                 // Im qurious what would be better, this or shifting the array, im guessing both are shit
             }
@@ -63,6 +66,112 @@ namespace DWGAutoPublisherBackend.Model.DWGPrinter
 
             TicketHandeler();
         }
+
+        private static void UpdatePathInSQL(Layout layout)
+        {
+            try
+            {
+                using (var conection = new SqlConnection(Config.SQLConnectionString))
+                {
+                    conection.Open();
+
+                    Console.WriteLine("Successfully connected to the database. UpdatePathInSQL in DWGPrintingQue");
+
+                    string dQLUpdater = "UPDATE [master].[dbo].[Layouts] " +
+                        "SET [LastPrinted] = @LastPrinted, " +
+                        "[FilePath] = @FilePath " +
+                        "WHERE [Name] = @Name " +
+                        "AND [DWGFileName] = @ParentFilePath";
+
+                    using (var command = new SqlCommand(dQLUpdater, conection))
+                    {
+
+                        command.Parameters.AddWithValue("@LastPrinted", layout.LastPrinted);
+                        command.Parameters.AddWithValue("@FilePath", layout.FilePath);
+                        command.Parameters.AddWithValue("@Name", layout.Name);
+                        command.Parameters.AddWithValue("@ParentFilePath", layout.ParentFilePath);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("There was an error: " + e.Message + " - UpdatePathInSQL in DWGPrintingQue");
+            }
+        }
     }
 }
 
+/*
+
+private static void UpdateSQLWithLayoutsOnStartup()
+        {
+            try
+            {
+                var missingLayoutsFromSQL = new List<Layout>();
+                var allParentFileNamesFromSQL = new List<string>();
+                var allFileNamesFromSQL = new List<string>();
+
+                using (var conection = new SqlConnection(Config.SQLConnectionString))
+                {
+                    conection.Open();
+
+                    Console.WriteLine("Successfully connected to the database. UpdateSQLWithLayoutsOnStartup");
+
+                    string queryString = "SELECT DWGFileName, Name  FROM [master].[dbo].[Layouts]";
+                    using (var command = new SqlCommand(queryString, conection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                allParentFileNamesFromSQL.Add(String.Format("{0}", reader[0]));
+                                allFileNamesFromSQL.Add(String.Format("{0}", reader[1]));
+                            }
+                        }
+
+                        foreach (var layout in Layouts)
+                        {
+                            bool add = true;
+                            for (int i = 0; i < allFileNamesFromSQL.Count; i++)
+                            {
+                                if (!(
+                                    layout.Name == allFileNamesFromSQL[i] &&
+                                    allParentFileNamesFromSQL[i].Contains(layout.Parent.FileName)
+                                    ))
+                                {
+                                    add = false; break;
+                                }
+                            }
+                            if (add) missingLayoutsFromSQL.Add(layout);
+                        }
+                    }
+
+                    if (missingLayoutsFromSQL.Count != 0)
+                    {
+                        string layoutAdder = "INSERT INTO [master].[dbo].[Layouts] (DWGFileName, Name, Status) VALUES";
+                        for (int i = 0; i < missingLayoutsFromSQL.Count; i++)
+                        {
+                            if (i == 0) layoutAdder += $" (@DWGFileName{i}, @Name{i}, @Status{i})";
+                            else layoutAdder += $", (@DWGFileName{i}, @Name{i}, @Status{i})";
+                        }
+                        using (var command = new SqlCommand(layoutAdder, conection))
+                        {
+                            for (int i = 0; i < missingLayoutsFromSQL.Count; i++)
+                            {
+                                command.Parameters.AddWithValue($"@DWGFileName{i}", missingLayoutsFromSQL[i].Parent.FilePath);
+                                command.Parameters.AddWithValue($"@Name{i}", missingLayoutsFromSQL[i].Name);
+                                command.Parameters.AddWithValue($"@Status{i}", missingLayoutsFromSQL[i].Status);
+                            }
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("There was an error: " + e.Message + " - UpdateSQLWithLayoutsOnStartup");
+            }
+        }
+
+ */

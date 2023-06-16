@@ -26,19 +26,23 @@ namespace DWGAutoPublisherBackend.Controllers
 
             try
             {
-                using (var conection = new SqlConnection(Config.SQLConnectionString))
+                using (var connection = new SqlConnection(Config.SQLConnectionString))
                 {
-                    conection.Open();
+                    connection.Open();
 
                     Console.WriteLine("Successfully connected to the database. LayoutStatusUpdater");
 
-                    string queryString = $"UPDATE [master].[dbo].[Layouts] " +
-                        $"SET [Status] = '{foundLayout.Status}' " +
-                        $"WHERE [Name] = '{foundLayout.Name}' " +
-                        $"AND [DWGFileName] = '{foundLayout.ParentFilePath}'";
+                    string queryString = "UPDATE [master].[dbo].[Layouts] " +
+                        "SET [Status] = @Status " +
+                        "WHERE [Name] = @Name " +
+                        "AND [DWGFileName] = @ParentFilePath";
 
-                    using (var command = new SqlCommand(queryString, conection))
+                    using (var command = new SqlCommand(queryString, connection))
                     {
+                        command.Parameters.AddWithValue("@Status", foundLayout.Status);
+                        command.Parameters.AddWithValue("@Name", foundLayout.Name);
+                        command.Parameters.AddWithValue("@ParentFilePath", foundLayout.ParentFilePath);
+
                         command.ExecuteNonQuery();
                     }
                 }
@@ -47,6 +51,7 @@ namespace DWGAutoPublisherBackend.Controllers
             {
                 Console.WriteLine("There was an error: " + e.Message);
             }
+
         }
     }
 }

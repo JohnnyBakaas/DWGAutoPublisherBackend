@@ -28,7 +28,7 @@ namespace DWGAutoPublisherBackend.Model
             UpdateSQLWithLayoutsOnStartup();
 
             GetStatusForDWGsFromSQL();
-            GetStatusForLayoutsromSQL();
+            GetStatusForLayoutsFromSQL();
 
             Console.WriteLine("DB Startup lets GO!!! \n");
             Projects.ForEach(e => { Console.WriteLine(e.ToString()); });
@@ -378,7 +378,7 @@ namespace DWGAutoPublisherBackend.Model
             }
         }
 
-        private static void GetStatusForLayoutsromSQL()
+        private static void GetStatusForLayoutsFromSQL()
         {
             try
             {
