@@ -17,7 +17,9 @@
         _directoryPath = directoryPath;
     }
 
-    public List<string> ReadAll()
+
+
+    public List<string> ListAllPaths()
     {
         var list = new List<string>();
         ReadAllInternal(_directoryPath, list);
@@ -53,3 +55,4 @@
         }
     }
 }
+

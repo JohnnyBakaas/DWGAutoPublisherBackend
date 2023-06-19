@@ -60,10 +60,62 @@ namespace DWGAutoPublisherBackend.Model
             return DWGs.FirstOrDefault(e => e.FilePath == dWGFromFrontEnd.FilePath);
         }
 
+        public static void OnTimedCheckAllFilesAndProjects(Object source, System.Timers.ElapsedEventArgs e)
+        {
+            CheckAllFilesAndProjects();
+            Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
+        }
+
+        public static void CheckAllFilesAndProjects()
+        {
+            var directory = new DirectoryReader(Config.RootFolder);
+            var list = directory.ListAllPaths();
+
+            foreach (var path in list)
+            {
+                string child = GetTypeOfChild(path);
+                int pNumber = PathToProjectNumber(path);
+                string pName = PathToProjectName(path);
+                if (child == "porject")
+                {
+                    var fount = Projects.FirstOrDefault(e => e.ProjectPath == path && e.ProjectNumber == pNumber && e.ProjectName == pName);
+
+                    if (fount == null)
+                    {
+                        Projects.Add(new Project(path, pNumber, pName));
+                    }
+                }
+                else if (child == ".dwg")
+                {
+                    var found = DWGs.FirstOrDefault(e =>
+                    {
+                        return e.FilePath == path && e.ProjectNumber == pNumber && pName.Contains(e.FileName);
+                    });
+
+                    if (found == null)
+                    {
+                        DWGs.Add(new DWGFile(path, pNumber, pName));
+                    }
+                    else
+                    {
+                        if (found != null)
+                        {
+                            found.UpdateLastWriteTime();
+                        }
+                        else
+                        {
+                            Console.WriteLine("CheckAllFilesAndProjects in DB faild. Use DEBUGER. Somthing seriously wrong has happend");
+                        }
+                    }
+                }
+            }
+            Console.WriteLine("Lengde: " + DWGs.Count);
+        }
+
         private static void GetDirectory()
         {
             var directory = new DirectoryReader(Config.RootFolder);
-            List<string> list = directory.ReadAll();
+            List<string> list = directory.ListAllPaths();
             foreach (string file in list)
             {
                 string child = GetTypeOfChild(file);

@@ -127,7 +127,7 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
         public void UpdateLastWriteTime()
         {
             DateTime lastWriteTime = File.GetLastWriteTime(FilePath);
-            if (LastUpdated != lastWriteTime)
+            if (!LastUpdated.Equals(lastWriteTime))
             {
                 LastUpdated = lastWriteTime;
                 UpdateLayoutList();

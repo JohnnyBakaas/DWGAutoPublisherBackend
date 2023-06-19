@@ -124,7 +124,3 @@ namespace DWGAutoPublisherBackend.Model.AutoCAD_Handeler
         }
     }
 }
-
-/*
-
- */

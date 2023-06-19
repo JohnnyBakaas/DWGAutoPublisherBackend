@@ -6,10 +6,6 @@ namespace DWGAutoPublisherBackend.Model.DWGPrinter
 {
     public static class DWGPrintingQue
     {
-        // I should really be using a propper Que with a linked list, but its like 10 elements max... so this is fine.
-        // Also the time complexety is O(n^AutoCAD) so thats the actual limiting factor. Multy threading would be a good idea to.
-        // Update! Now using a LL, Dose not matter alt all, but this is cooler and better for preformance... tecnicaly
-        // This is stil O(n^AutoCAD), so you know
         private static LinkedList<DWGPrintingQueTicket> _ticketQue = new LinkedList<DWGPrintingQueTicket>();
 
         private static List<DWGPrintingQueTicket> _compleatedTickets = new List<DWGPrintingQueTicket>();
@@ -57,7 +53,6 @@ namespace DWGAutoPublisherBackend.Model.DWGPrinter
                 UpdatePathInSQL(layouts[i]);
 
                 paths[i] = "No layout shall ever be caled this";
-                // Im qurious what would be better, this or shifting the array, im guessing both are shit
             }
 
             _compleatedTickets.Add(firstValueInQ);

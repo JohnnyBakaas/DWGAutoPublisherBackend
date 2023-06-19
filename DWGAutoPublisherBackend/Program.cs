@@ -5,9 +5,13 @@ using DWGAutoPublisherBackend.Model;
 
 Console.WriteLine(Config.LayoutReaderScript);
 
-
 var dB = DB.Instance;
 
+var timer = new System.Timers.Timer();
+timer.Interval = 10 * 1000;
+timer.Elapsed += DB.OnTimedCheckAllFilesAndProjects;
+timer.AutoReset = true;
+timer.Start();
 /*
 Console.WriteLine("Publis test");
 Console.WriteLine();
