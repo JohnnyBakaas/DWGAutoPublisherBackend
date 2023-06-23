@@ -11,7 +11,7 @@ var timer = new System.Timers.Timer();
 timer.Interval = 10 * 1000;
 timer.Elapsed += DB.OnTimedCheckAllFilesAndProjects;
 timer.AutoReset = true;
-timer.Start();
+timer.Start(); // Driten er FUBAR PLZ help Legg til greiene i SQL
 /*
 Console.WriteLine("Publis test");
 Console.WriteLine();

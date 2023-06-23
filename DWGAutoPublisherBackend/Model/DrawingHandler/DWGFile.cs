@@ -64,22 +64,22 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
 
         private string GetNameFromFilePath()
         {
-            string reversedPath = ReverseThisShit(FilePath);
+            string reversedPath = ReverseString(FilePath);
 
             string reversedFileName = reversedPath.Substring(0, reversedPath.IndexOf("\\"));
-            return ReverseThisShit(reversedFileName);
+            return ReverseString(reversedFileName);
         }
 
-        private string ReverseThisShit(string shit)
+        private string ReverseString(string input)
         {
-            string shitOut = string.Empty;
+            string outPut = string.Empty;
 
-            for (int i = shit.Length - 1; i >= 0; i--)
+            for (int i = input.Length - 1; i >= 0; i--)
             {
-                shitOut += shit[i];
+                outPut += input[i];
             }
 
-            return shitOut;
+            return outPut;
         }
 
         public void UpdateLayoutList()
