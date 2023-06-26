@@ -4,7 +4,7 @@ namespace DWGAutoPublisherBackend.Model.AutoCAD_Handeler
 {
     public static class LayoutReader
     {
-        public static List<string> Read(string dwgFilePath)
+        public static List<string> GetLayoutNames(string dwgFilePath)
         {
             string autoCADPath = Config.AutoCADCoreConsolePath;
             //@"C:\Test for Autocad greier\P-10001\DWG\P-10001 2.etg.dwg"

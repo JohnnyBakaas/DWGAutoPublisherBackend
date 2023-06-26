@@ -1,5 +1,6 @@
 ﻿using DWGAutoPublisherBackend.Model.AutoCAD_Handeler;
 using DWGAutoPublisherBackend.Model.DrawingsFromFrontEnd;
+using Microsoft.Data.SqlClient;
 
 namespace DWGAutoPublisherBackend.Model.DrawingHandler
 {
@@ -84,7 +85,7 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
 
         public void UpdateLayoutList()
         {
-            List<string> layoutNames = LayoutReader.Read(FilePath);
+            List<string> layoutNames = LayoutReader.GetLayoutNames(FilePath);
             foreach (string layoutName in layoutNames)
             {
                 //Console.WriteLine(layoutName);
@@ -130,7 +131,64 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
             if (!LastUpdated.Equals(lastWriteTime))
             {
                 LastUpdated = lastWriteTime;
+
+                try
+                {
+                    using (var connection = new SqlConnection(Config.SQLConnectionString))
+                    {
+                        connection.Open();
+                        Console.WriteLine("Successfully connected to the database. UpdateLastWriteTime");
+
+                        string queryString = "UPDATE [master].[dbo].[DWGs] SET LastUpdated = @LastUpdated WHERE FileName = @FileName";
+                        using (var command = new SqlCommand(queryString, connection))
+                        {
+                            command.Parameters.AddWithValue("@LastUpdated", LastUpdated);
+                            command.Parameters.AddWithValue("@FileName", FileName);
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
                 UpdateLayoutList();
+                RemoveLinkesToLayoutPathInSQL();
+            }
+        }
+
+        private void RemoveLinkesToLayoutPathInSQL()
+        {
+            foreach (Layout layout in Layouts)
+            {
+                if (!layout.PastNoReturn())
+                {
+                    try
+                    {
+                        using (var connection = new SqlConnection(Config.SQLConnectionString))
+                        {
+                            connection.Open();
+                            Console.WriteLine("Successfully connected to the database. UpdateLastWriteTime");
+
+                            string queryString =
+                                "UPDATE [master].[dbo].[Layouts] " +
+                                "SET LastPrinted = @LastPrinted " +
+                                "WHERE DWGFileName = @DWGFileName AND Name = @Name";
+                            using (var command = new SqlCommand(queryString, connection))
+                            {
+                                command.Parameters.AddWithValue("@LastPrinted", null);
+                                command.Parameters.AddWithValue("@DWGFileName", FilePath);
+                                command.Parameters.AddWithValue("@Name", layout.Name);
+                                command.ExecuteNonQuery();
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                }
             }
         }
 

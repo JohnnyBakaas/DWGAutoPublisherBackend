@@ -344,20 +344,16 @@ namespace DWGAutoPublisherBackend.Model
                         {
                             while (reader.Read())
                             {
-
                                 allParentFileNamesFromSQL.Add(String.Format("{0}", reader[0]));
                                 allFileNamesFromSQL.Add(String.Format("{0}", reader[1]));
                             }
                         }
-
-
 
                         foreach (var layout in Layouts)
                         {
                             bool add = true;
                             for (int i = 0; i < allFileNamesFromSQL.Count; i++)
                             {
-
                                 if (!(
                                     layout.Name == allFileNamesFromSQL[i] &&
                                     allParentFileNamesFromSQL[i].Contains(layout.Parent.FileName)

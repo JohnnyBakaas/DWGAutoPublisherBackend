@@ -24,5 +24,15 @@
         {
             return $" - {Name} - {FilePath}";
         }
+
+        public bool PastNoReturn()
+        {
+            if (
+                Status == "Under produksjon" ||
+                Status == "Produsert" ||
+                Status == "Levert"
+                ) return true;
+            return false;
+        }
     }
 }
