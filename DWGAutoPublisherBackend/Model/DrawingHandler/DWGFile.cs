@@ -169,7 +169,7 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
                         using (var connection = new SqlConnection(Config.SQLConnectionString))
                         {
                             connection.Open();
-                            Console.WriteLine("Successfully connected to the database. UpdateLastWriteTime");
+                            Console.WriteLine("Successfully connected to the database. RemoveLinkesToLayoutPathInSQL");
 
                             string queryString =
                                 "UPDATE [master].[dbo].[Layouts] " +
@@ -177,11 +177,13 @@ namespace DWGAutoPublisherBackend.Model.DrawingHandler
                                 "WHERE DWGFileName = @DWGFileName AND Name = @Name";
                             using (var command = new SqlCommand(queryString, connection))
                             {
-                                command.Parameters.AddWithValue("@LastPrinted", null);
+                                // Pass DBNull.Value for the @LastPrinted parameter to indicate null value
+                                command.Parameters.AddWithValue("@LastPrinted", DBNull.Value);
                                 command.Parameters.AddWithValue("@DWGFileName", FilePath);
                                 command.Parameters.AddWithValue("@Name", layout.Name);
                                 command.ExecuteNonQuery();
                             }
+
                         }
                     }
                     catch (Exception ex)

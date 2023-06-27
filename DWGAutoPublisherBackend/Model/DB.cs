@@ -60,7 +60,9 @@ namespace DWGAutoPublisherBackend.Model
             return DWGs.FirstOrDefault(e => e.FilePath == dWGFromFrontEnd.FilePath);
         }
 
-        public static void OnTimedCheckAllFilesAndProjects(Object source, System.Timers.ElapsedEventArgs e)
+        public static void OnTimedCheckAllFilesAndProjects(
+                Object source, System.Timers.ElapsedEventArgs e
+            )
         {
             CheckAllFilesAndProjects();
             Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
@@ -70,15 +72,20 @@ namespace DWGAutoPublisherBackend.Model
         {
             var directory = new DirectoryReader(Config.RootFolder);
             var list = directory.ListAllPaths();
+            var listOfNewDWGs = new List<DWGFile>();
 
             foreach (var path in list)
             {
                 string child = GetTypeOfChild(path);
                 int pNumber = PathToProjectNumber(path);
                 string pName = PathToProjectName(path);
-                if (child == "porject")
+                if (child == "project")
                 {
-                    var fount = Projects.FirstOrDefault(e => e.ProjectPath == path && e.ProjectNumber == pNumber && e.ProjectName == pName);
+                    var fount = Projects.FirstOrDefault(e =>
+                        e.ProjectPath == path &&
+                        e.ProjectNumber == pNumber &&
+                        e.ProjectName == pName
+                    );
 
                     if (fount == null)
                     {
@@ -89,12 +96,16 @@ namespace DWGAutoPublisherBackend.Model
                 {
                     var found = DWGs.FirstOrDefault(e =>
                     {
-                        return e.FilePath == path && e.ProjectNumber == pNumber && pName.Contains(e.FileName);
+                        return e.FilePath == path &&
+                        e.ProjectNumber == pNumber &&
+                        pName.Contains(e.FileName);
                     });
 
                     if (found == null)
                     {
-                        DWGs.Add(new DWGFile(path, pNumber, pName));
+                        var dWG = new DWGFile(path, pNumber, pName);
+                        DWGs.Add(dWG);
+                        listOfNewDWGs.Add(dWG);
                     }
                     else
                     {
@@ -104,11 +115,31 @@ namespace DWGAutoPublisherBackend.Model
                         }
                         else
                         {
-                            Console.WriteLine("CheckAllFilesAndProjects in DB faild. Use DEBUGER. Somthing seriously wrong has happend");
+                            Console.WriteLine(
+                                "CheckAllFilesAndProjects in DB faild. " +
+                                "Use DEBUGER. Somthing seriously " +
+                                "wrong has happend");
                         }
                     }
                 }
             }
+
+            foreach (var file in listOfNewDWGs)
+            {
+                var foundProject = Projects.FirstOrDefault
+                    (e => file.ProjectName.Contains(e.ProjectName) &&
+                    e.ProjectNumber == file.ProjectNumber);
+
+                if (foundProject != null) foundProject.DWGs.Add(file);
+                else Console.WriteLine("Error at DB line 124. DWG " + file.FileName + " failed.");
+            }
+
+            if (listOfNewDWGs.Count != 0)
+            {
+                GetStatusForDWGsFromSQL();
+                GetStatusForLayoutsFromSQL();
+            }
+
             Console.WriteLine("Lengde: " + DWGs.Count);
         }
 
@@ -121,7 +152,7 @@ namespace DWGAutoPublisherBackend.Model
                 string child = GetTypeOfChild(file);
                 int pNumber = PathToProjectNumber(file);
                 string pName = PathToProjectName(file);
-                if (child == "porject") Projects.Add(new Project(file, pNumber, pName));
+                if (child == "project") Projects.Add(new Project(file, pNumber, pName));
                 else if (child == ".dwg") DWGs.Add(new DWGFile(file, pNumber, pName));
             }
         }
@@ -164,8 +195,10 @@ namespace DWGAutoPublisherBackend.Model
             if (
                 indexOfLastDot == 0 &&
                 file.IndexOf(Config.ProjectIdentifier) != -1 &&
-                file.IndexOf('\\', file.IndexOf(Config.ProjectIdentifier)) == -1
-                ) return "porject";
+                file.IndexOf('\\', file.IndexOf(
+                    Config.ProjectIdentifier)
+                ) == -1
+                ) return "project";
 
             if (indexOfLastDot == 0) return "folder";
 
